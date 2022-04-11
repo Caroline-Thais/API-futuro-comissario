@@ -1,6 +1,7 @@
 var knex = require("../database/connection");
 var bcrypt = require("bcrypt");
 const res = require("express/lib/response");
+const { update } = require("../database/connection");
 
 class User{
 
@@ -53,8 +54,45 @@ class User{
         }catch(err){
                 console.log(err);
                 return false;
-            }            
+            }      
     }
-}
+            async update (id, name, email, role){
+
+                var user = await this.findById(id);
+
+                if(user != undefined){
+                    var editUser = {}
+
+                    if(email != undefined){
+                        if(email != user.email){
+                            var result = await this.findEmail(email);
+                            if(result == false){
+                                editUser.email = email;
+                            }else{
+                                return {status: false, err: "O email já está cadastrado!"}
+                            }
+                        }
+                    }
+
+                    if(name != undefined){
+                        editUser.name = name;
+                    }
+
+                    if(role != undefined){
+                        editUser.role = role;
+                    }
+
+                    try{
+                    await knex.update(editUser).where({id: id}).table("users");
+                    return{status: true}
+                }catch(err){
+                    return {status: false, err: err}
+                    }
+                }else{
+                    return{status: false, err: "O usuário não existe."}
+                }
+            }
+    }
+
 
 module.exports = new User();
