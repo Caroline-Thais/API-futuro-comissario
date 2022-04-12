@@ -1,5 +1,6 @@
 const { rawListeners } = require("../database/connection");
 var User = require("../models/User");
+var PasswordToken = require("../models/PasswordToken");
 
 class UserController{
 
@@ -64,10 +65,24 @@ class UserController{
 
     async remove(req, res){
         var id = req.params.id;
-        var result = await User.delete(id)
+
+        var result = await User.delete(id);
+        
         if(result.status){
             res.status(200);
             res.send("Tudo Ok!");
+        }else{
+            res.status(406);
+            res.send(result.err);
+        }
+    }
+
+    async recoverPassword(req, res){
+        var email = req.body.email;
+        var result = await PasswordToken.create(email);
+        if(result.status){
+            res.status(200);
+            res.send("" + result.token);
         }else{
             res.status(406);
             res.send(result.err);
