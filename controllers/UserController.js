@@ -3,6 +3,10 @@ var User = require("../models/User");
 var PasswordToken = require("../models/PasswordToken");
 var jwt = require("jsonwebtoken");
 const res = require("express/lib/response");
+var jwt = require("jsonwebtoken");
+var bcrypt = require("bcrypt");
+
+var secret = "abcdefgh";
 
 class UserController{
 
