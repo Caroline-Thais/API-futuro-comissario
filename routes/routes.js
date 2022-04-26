@@ -16,7 +16,8 @@ router.post("/recoverpassword", UserController.recoverPassword);
 router.post("/changepassword", UserController.changePassword);
 router.post("/login", UserController.login);
 router.post("/validate", AdminAuth, HomeController.validate);
-router.post('/vaga', VagaController.create)
-
+router.post('/vaga', VagaController.create);
+router.get('/vagas', VagaController.index);
+router.delete('/vagas/:id', VagaController.remove)
 
 module.exports = router;

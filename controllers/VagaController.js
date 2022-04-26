@@ -18,6 +18,25 @@ class VagaController{
         res.send("Tudo ok.")
     }
 
+    async index(req, res){
+        var vagas = await Vaga.findAll();
+        res.json(vagas);
+    }
+
+    async remove(req, res){
+        var id = req.params.id;
+
+        var result = await Vaga.delete(id);
+        
+        if(result.status){
+            res.status(200);
+            res.send("Tudo Ok!");
+        }else{
+            res.status(406);
+            res.send(result.err);
+        }
+    }
+
 }
 
 module.exports = new VagaController();
