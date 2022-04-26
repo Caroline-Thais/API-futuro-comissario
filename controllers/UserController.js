@@ -3,10 +3,11 @@ var User = require("../models/User");
 var PasswordToken = require("../models/PasswordToken");
 var jwt = require("jsonwebtoken");
 const res = require("express/lib/response");
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcrypt");
 
 var secret = "abcdefgh";
+
+var bcrypt = require("bcrypt");
+
 
 class UserController{
 
@@ -29,9 +30,9 @@ class UserController{
 
     async create(req, res){
         
-        var { email, name, password } = req.body;
+        var { name, email, password } = req.body;
 
-        if(email == undefined){
+        if(email == undefined || email == "" || email == " "){
             res.status(400);
             res.json({err: "O email é inválido."})
             return;
@@ -125,10 +126,11 @@ class UserController{
                 res.json({token: token});
         }else{
             res.status(406);
-            res.send("Senha incorreta.")
+            res.json({err: "Senha incorreta."});
         }
         }else{
-            res.json({status: false})
+            res.status(406);
+            res.json({status: false, err: "O usuário não existe."})
         }
     }
 }
